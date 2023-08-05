@@ -1,0 +1,34 @@
+{
+    "name": "@emailcraft/components",
+    "version": "0.0.1",
+    "main": "./index.tsx",
+    "types": "./index.tsx",
+    "license": "MIT",
+    "scripts": {
+        "lint": "eslint \"**/*.ts*\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/messageraft/emailcraft.git",
+        "directory": "packages/components"
+    },
+    "keywords": [
+        "react",
+        "email"
+    ],
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "@emailcraft/utils": "*"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.0",
+        "eslint": "^7.32.0",
+        "eslint-config-custom": "*",
+        "tsconfig": "*",
+        "typescript": "^5.1.6"
+    }
+}
