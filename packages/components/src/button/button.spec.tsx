@@ -1,18 +1,18 @@
-import { Button } from "./button";
+import { Button } from './button'
 //import { render } from "@react-email/render";
-import { render } from "@testing-library/react";
+import { render } from '@testing-library/react'
 
-describe("render", () => {
+describe('render', () => {
   beforeEach(() => {
-    jest.restoreAllMocks();
-    jest.resetModules();
-  });
+    jest.restoreAllMocks()
+    jest.resetModules()
+  })
 
-  it("should render component", () => {
-    const { getByTestId } = render(<Button />);
+  it('should render component', () => {
+    const { getByTestId } = render(<Button />)
 
-    expect(getByTestId("emailcraft-button")).toBeVisible();
-  });
+    expect(getByTestId('emailcraft-button')).toBeVisible()
+  })
 
   //    it("renders the <Button> component", () => {
   //        const actualOutput = render(
@@ -29,4 +29,4 @@ describe("render", () => {
   //            `"<!DOCTYPE html PUBLIC \\"-//W3C//DTD XHTML 1.0 Transitional//EN\\" \\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\\"><a href=\\"https://example.com\\" data-id=\\"react-email-button\\" target=\\"_blank\\" style=\\"line-height:100%;text-decoration:none;display:inline-block;max-width:100%;padding:0px 0px\\"><span><!--[if mso]><i style=\\"letter-spacing: 0px;mso-font-width:-100%;mso-text-raise:0\\" hidden>&nbsp;</i><![endif]--></span><span style=\\"max-width:100%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:0\\"></span><span><!--[if mso]><i style=\\"letter-spacing: 0px;mso-font-width:-100%\\" hidden>&nbsp;</i><![endif]--></span></a>"`,
   //            );
   //    });
-});
+})
