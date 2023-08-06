@@ -14,6 +14,13 @@ describe('render', () => {
     expect(getByTestId('emailcraft-button')).toBeVisible()
   })
 
+  it('should render component with target', () => {
+    const { getByTestId } = render(<Button target="_self" />)
+
+    const button = getByTestId('emailcraft-button')
+    expect(button).toBeVisible()
+    expect(button).toHaveAttribute('target', '_self')
+  })
   //    it("renders the <Button> component", () => {
   //        const actualOutput = render(
   //            <Button pX={20} pY={12} href="https://example.com" />,
