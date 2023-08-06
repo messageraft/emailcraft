@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: "jsdom",
+  testEnvironment: "node",
   preset: "ts-jest",
   clearMocks: true,
   resetMocks: true,
