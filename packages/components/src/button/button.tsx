@@ -21,7 +21,7 @@ export const Button = React.forwardRef<ButtonElement, Readonly<ButtonProps>>(
             <a
                 {...props}
                 ref={forwardedRef}
-                data-id="react-email-button"
+                data-testid="emailcraft-button"
                 target={target}
                 style={buttonStyle({ ...style, pX, pY })}
                 >
