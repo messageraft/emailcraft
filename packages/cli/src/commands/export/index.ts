@@ -7,7 +7,7 @@ import { debug as debugInit } from 'debug'
 import esbuild from 'esbuild'
 import fs from 'fs'
 import { render } from '@emailcraft/render'
-import { copy, copySync, outputFileSync, removeSync } from 'fs-extra'
+import { copySync, outputFileSync, removeSync } from 'fs-extra'
 import tree from 'tree-node-cli'
 import logSymbols from 'log-symbols'
 import { closeOraOnSIGNIT } from '../../utils/closeOraOnSigInt'
@@ -103,7 +103,6 @@ export default class Export extends Command {
       debug('[outStaticDir]', path.join(process.cwd(), outDir, 'static'))
       spinner.text = `Copying static files`
       spinner.render()
-      debug('[Copying Static Files]')
 
       try {
         copySync(staticDir, path.join(process.cwd(), outDir, 'static'))
