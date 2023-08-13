@@ -3,6 +3,7 @@ import fse from 'fs-extra'
 import fs from 'fs'
 import shell from 'shelljs'
 import path from 'path'
+import { REMOTE_CLIENT_DIR } from '../constants'
 
 const DEFAULT_PATH = '.emailcraft'
 
@@ -16,6 +17,7 @@ export const downloadClient = async ({ clientDir }: { clientDir?: string }) => {
     downloadRes = await octokit.repos.downloadTarballArchive({
       owner: 'messageraft',
       repo: 'emailcraft'
+      // todo add ref versioning - currently uses main branch
     })
   } catch (e) {
     console.log(e)
@@ -28,7 +30,10 @@ export const downloadClient = async ({ clientDir }: { clientDir?: string }) => {
     { silent: true }
   )
 
-  fse.moveSync(path.join(tempFolderName, 'apps/web'), path.join(folderName))
+  fse.moveSync(
+    path.join(tempFolderName, REMOTE_CLIENT_DIR),
+    path.join(folderName)
+  )
 
   fse.removeSync(tempFolderName)
 }

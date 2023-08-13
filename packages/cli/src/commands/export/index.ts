@@ -127,6 +127,6 @@ export default class Export extends Command {
       text: 'Successfully exported emails'
     })
 
-    process.exit()
+    process.exit(0)
   }
 }
