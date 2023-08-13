@@ -10,7 +10,7 @@ const debug = debugInit('emailcraft:init')
 export default class Init extends Command {
   static description = 'Prepares directory structure for email development'
 
-  static examples = [`$ emailcraft init --emails .emails --clientDir <path>`]
+  static examples = [`$ emailcraft init --emailsDir <path> --clientDir <path>`]
 
   static flags = {
     emailsDir: Flags.string({
