@@ -4,10 +4,15 @@ import fs from 'fs'
 import shell from 'shelljs'
 import path from 'path'
 import { REMOTE_CLIENT_DIR } from '../constants'
+import ora from 'ora'
+import { closeOraOnSIGNIT } from '../utils/closeOraOnSigInt'
+import logSymbols from 'log-symbols'
 
 const DEFAULT_PATH = '.emailcraft'
 
 export const downloadClient = async ({ clientDir }: { clientDir?: string }) => {
+  const spinner = ora('Downloading client...\n').start()
+  closeOraOnSIGNIT(spinner)
   const folderName = clientDir ?? DEFAULT_PATH
   const tempFolderName = folderName + '-temp'
   const octokit = new Octokit()
@@ -36,4 +41,9 @@ export const downloadClient = async ({ clientDir }: { clientDir?: string }) => {
   )
 
   fse.removeSync(tempFolderName)
+
+  spinner.stopAndPersist({
+    symbol: logSymbols.success,
+    text: 'Client downloaded'
+  })
 }

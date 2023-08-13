@@ -1,10 +1,19 @@
 import { Command, Flags } from '@oclif/core'
+import { detect as detectPackageManager } from 'detect-package-manager'
+import { findRoot } from '@manypkg/find-root'
 import { debug as debugInit } from 'debug'
 import { downloadClient } from '../../modules/downloadClient'
 import fs from 'fs'
 import ora from 'ora'
-import { DEFAULT_CLIENT_DIR, DEFAULT_EMAILS_DIR } from '../../constants'
+import {
+  CURRENT_PATH,
+  DEFAULT_CLIENT_DIR,
+  DEFAULT_EMAILS_DIR
+} from '../../constants'
 import { closeOraOnSIGNIT } from '../../utils/closeOraOnSigInt'
+import { PackageManager } from '../../typings'
+import { installDependencies } from '../../modules/installDependencies'
+import logSymbols from 'log-symbols'
 
 const debug = debugInit('emailcraft:init')
 export default class Init extends Command {
@@ -34,6 +43,13 @@ export default class Init extends Command {
     const { emailsDir, clientDir } = flags
 
     const spinner = ora('Checking...').start()
+    const cwd = await findRoot(CURRENT_PATH).catch(() => ({
+      rootDir: CURRENT_PATH
+    }))
+    const packageManager: PackageManager = await detectPackageManager({
+      cwd: cwd.rootDir
+    }).catch(() => 'npm')
+
     closeOraOnSIGNIT(spinner)
 
     try {
@@ -49,16 +65,18 @@ export default class Init extends Command {
         process.exit(0)
       }
 
-      spinner.text = 'Downloading client...'
       await downloadClient({ clientDir })
+      installDependencies({ packageManager, clientDir })
     } catch (error) {
       spinner.stop()
       console.log(error)
       process.exit(1)
     }
 
-    spinner.text = 'Client downloaded'
-    spinner.succeed()
+    spinner.stopAndPersist({
+      symbol: logSymbols.success,
+      text: 'Finished'
+    })
 
     process.exit(0)
   }
