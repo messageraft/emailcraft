@@ -15,6 +15,7 @@ import { closeOraOnSIGNIT } from '../../utils/closeOraOnSigInt'
 import { PackageManager } from '../../typings'
 import { installDependencies } from '../../modules/installDependencies'
 import logSymbols from 'log-symbols'
+import { copyEmailTemplates } from '../../modules/copyEmailTemplates'
 
 const debug = debugInit('emailcraft:init')
 export default class Init extends Command {
@@ -67,7 +68,7 @@ export default class Init extends Command {
 
       await downloadClient({ clientDir })
       installDependencies({ packageManager, clientDir })
-      // TODO link emails if default scaffold selected
+      copyEmailTemplates()
     } catch (error) {
       spinner.stop()
       console.log(error)
