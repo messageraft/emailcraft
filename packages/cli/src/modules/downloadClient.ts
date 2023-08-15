@@ -22,7 +22,7 @@ export const downloadClient = async ({ clientDir }: { clientDir?: string }) => {
     downloadRes = await octokit.repos.downloadTarballArchive({
       owner: 'messageraft',
       repo: 'emailcraft'
-      // todo add ref versioning - currently uses main branch
+      // TODO add ref versioning - currently uses main branch
     })
   } catch (e) {
     console.log(e)

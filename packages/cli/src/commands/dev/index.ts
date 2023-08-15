@@ -2,10 +2,9 @@ import { Command, Flags } from '@oclif/core'
 import { detect as detectPackageManager } from 'detect-package-manager'
 import { findRoot } from '@manypkg/find-root'
 import { debug as debugInit } from 'debug'
+import { downloadClient } from '../../modules/downloadClient'
 import fs from 'fs'
 import ora from 'ora'
-import path from 'path'
-import { downloadClient } from '../../modules/downloadClient'
 import {
   CURRENT_PATH,
   DEFAULT_CLIENT_DIR,
@@ -55,8 +54,9 @@ export default class Init extends Command {
 
     try {
       if (!fs.existsSync(emailsDir)) {
-        debug('creating emails dir')
-        fs.mkdirSync(path.join(CURRENT_PATH, emailsDir), { recursive: true })
+        throw new Error(
+          `Missing email templates folder - [provided-path]: "${emailsDir}", [default]: "${DEFAULT_EMAILS_DIR}"`
+        )
       }
 
       if (fs.existsSync(clientDir)) {
