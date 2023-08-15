@@ -1,49 +1,22 @@
-//{
-//  "compilerOptions": {
-//    "declaration": true,
-//    "importHelpers": true,
-//    "module": "commonjs",
-//    "outDir": "dist",
-//    "rootDir": "src",
-//    "strict": true,
-//    "target": "es2019"
-//  },
-//  "include": [
-//    "src/**/*"
-//  ]
-//}
-
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
     "target": "ES2020", // Node.js 14
     "lib": ["DOM", "DOM.Iterable", "ES2020"],
-    "allowSyntheticDefaultImports": true, // To provide backwards compatibility, Node.js allows you to import most CommonJS packages with a default import. This flag tells TypeScript that it's okay to use import on CommonJS modules.
-    "resolveJsonModule": true,
-    "jsx": "react",
     "declaration": true,
-    "pretty": true,
-    "newLine": "lf",
-    "stripInternal": true,
+    "importHelpers": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "strict": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noEmitOnError": true,
-    "useDefineForClassFields": true,
-    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "rootDir": "src",
     "outDir": "dist",
-    "esModuleInterop": true,
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "esModuleInterop": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"],
+  "include": [
+    "src/**/*"
+  ],
+    "exclude": ["dist", "node_modules"],
   "ts-node": {
     "transpileOnly": true,
     "files": true,

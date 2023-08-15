@@ -13,7 +13,9 @@ export const installDependencies = ({
   packageManager,
   clientDir
 }: InstallDependencies) => {
+  console.log('ora', ora().start())
   const spinner = ora('Installing dependencies...\n').start()
+  console.log('spinner', spinner)
   closeOraOnSIGNIT(spinner)
   shell.cd(path.join(clientDir))
   shell.exec(`${packageManager} install`)
