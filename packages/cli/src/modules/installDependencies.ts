@@ -1,9 +1,9 @@
 import shell from 'shelljs'
 import path from 'path'
-import ora from 'ora'
 import { PackageManager } from '../typings'
 import { closeOraOnSIGNIT } from '../utils/closeOraOnSigInt'
 import logSymbols from 'log-symbols'
+import { spinner } from '../utils/spinner'
 
 interface InstallDependencies {
   packageManager: PackageManager
@@ -13,9 +13,7 @@ export const installDependencies = ({
   packageManager,
   clientDir
 }: InstallDependencies) => {
-  console.log('ora', ora().start())
-  const spinner = ora('Installing dependencies...\n').start()
-  console.log('spinner', spinner)
+  spinner.start('Installing dependencies...\n')
   closeOraOnSIGNIT(spinner)
   shell.cd(path.join(clientDir))
   shell.exec(`${packageManager} install`)

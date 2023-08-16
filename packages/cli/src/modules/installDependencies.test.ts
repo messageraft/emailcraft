@@ -1,33 +1,13 @@
 import { installDependencies } from './installDependencies'
 import shell from 'shelljs'
-import ora from 'ora'
 import { closeOraOnSIGNIT } from '../utils/closeOraOnSigInt'
 import { PackageManager } from '../typings'
+import { spinner } from '../utils/spinner'
 
 jest.mock('shelljs', () => ({
   cd: jest.fn(),
   exec: jest.fn()
 }))
-jest.mock('ora', () => {
-  const texts: string[] = []
-
-  const mockOra: any = () => ({
-    start: jest.fn().mockImplementation(function (this: any) {
-      return this
-    }),
-    set text(text: string) {
-      texts.push(text)
-    },
-    succeed: jest.fn().mockImplementation(function (this: any) {
-      return this
-    }),
-    stopAndPersist: jest.fn().mockImplementation(function (this: any) {
-      return this
-    })
-  })
-
-  return mockOra
-})
 
 jest.mock('../utils/closeOraOnSigInt')
 
@@ -46,17 +26,12 @@ describe('installDependencies', () => {
     expect(shell.exec).toHaveBeenCalledWith('npm install')
   })
 
-  it.only('should display spinner messages', () => {
+  it('should display spinner messages', () => {
+    const spinnerStartSpy = jest.spyOn(spinner, 'start')
+    const spinnerStopAndPersist = jest.spyOn(spinner, 'stopAndPersist')
     installDependencies({ packageManager: 'npm', clientDir: '/test/dir' })
-
-    const mockOra = ora as jest.MockedFunction<typeof ora>
-    const mockSpinner = mockOra.mock.results[0].value
-
-    expect(mockOra).toHaveBeenCalled()
-    expect(mockSpinner.start).toHaveBeenCalledWith(
-      'Installing dependencies...\n'
-    )
-    expect(mockSpinner.stopAndPersist).toHaveBeenCalledWith({
+    expect(spinnerStartSpy).toHaveBeenCalledWith('Installing dependencies...\n')
+    expect(spinnerStopAndPersist).toHaveBeenCalledWith({
       symbol: expect.anything(),
       text: 'Dependencies installed'
     })
@@ -65,11 +40,9 @@ describe('installDependencies', () => {
   it('should call closeOraOnSIGNIT', () => {
     installDependencies({ packageManager: 'npm', clientDir: '/test/dir' })
 
-    const mockOra = ora as jest.MockedFunction<typeof ora>
-    const mockSpinner = mockOra.mock.results[0].value
+    jest.mock('../utils/spinner')
 
-    expect(mockOra).toHaveBeenCalled()
-    expect(closeOraOnSIGNIT).toHaveBeenCalledWith(mockSpinner)
+    expect(closeOraOnSIGNIT).toHaveBeenCalledWith(spinner)
   })
 
   it('should throw an error if clientDir does not exist', () => {
