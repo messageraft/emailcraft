@@ -6,7 +6,8 @@ import { spinner } from '../utils/spinner'
 
 jest.mock('shelljs', () => ({
   cd: jest.fn(),
-  exec: jest.fn()
+  exec: jest.fn(),
+  test: jest.fn()
 }))
 
 jest.mock('../utils/closeOraOnSigInt')
@@ -14,6 +15,7 @@ jest.mock('../utils/closeOraOnSigInt')
 describe('installDependencies', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(shell.test as jest.Mock).mockReturnValue(true)
   })
 
   it('should switch to the clientDir directory', () => {
@@ -46,9 +48,7 @@ describe('installDependencies', () => {
   })
 
   it('should throw an error if clientDir does not exist', () => {
-    ;(shell.cd as jest.Mock).mockImplementationOnce(() => {
-      throw new Error()
-    })
+    ;(shell.test as jest.Mock).mockReturnValueOnce(false)
 
     expect(() => {
       installDependencies({
