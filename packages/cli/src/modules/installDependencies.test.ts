@@ -1,8 +1,18 @@
-import { installDependencies } from './installDependencies'
-import shell from 'shelljs'
-import { closeOraOnSIGNIT } from '../utils/closeOraOnSigInt'
-import { PackageManager } from '../typings'
-import { spinner } from '../utils/spinner'
+let mockOra: ReturnType<typeof createMockOra>
+const texts: string[] = []
+const createMockOra = () => ({
+  start: jest.fn(),
+  set text(text: string) {
+    texts.push(text)
+  },
+  succeed: jest.fn(),
+  stopAndPersist: jest.fn(),
+  fail: jest.fn()
+})
+jest.mock('ora', () => {
+  mockOra = createMockOra()
+  return () => mockOra
+})
 
 jest.mock('shelljs', () => ({
   cd: jest.fn(),
@@ -12,10 +22,26 @@ jest.mock('shelljs', () => ({
 
 jest.mock('../utils/closeOraOnSigInt')
 
+import shell from 'shelljs'
+import { installDependencies } from './installDependencies'
+import { closeOraOnSIGNIT } from '../utils/closeOraOnSigInt'
+import { PackageManager } from '../typings'
+
 describe('installDependencies', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     ;(shell.test as jest.Mock).mockReturnValue(true)
+    mockOra.start.mockImplementation(function (this: any) {
+      return this
+    })
+
+    mockOra.succeed.mockImplementation(function (this: any) {
+      return this
+    })
+
+    mockOra.stopAndPersist.mockImplementation(function (this: any) {
+      return this
+    })
   })
 
   it('should switch to the clientDir directory', () => {
@@ -29,11 +55,10 @@ describe('installDependencies', () => {
   })
 
   it('should display spinner messages', () => {
-    const spinnerStartSpy = jest.spyOn(spinner, 'start')
-    const spinnerStopAndPersist = jest.spyOn(spinner, 'stopAndPersist')
     installDependencies({ packageManager: 'npm', clientDir: '/test/dir' })
-    expect(spinnerStartSpy).toHaveBeenCalledWith('Installing dependencies...\n')
-    expect(spinnerStopAndPersist).toHaveBeenCalledWith({
+
+    expect(mockOra.start).toHaveBeenCalledWith('Installing dependencies...\n')
+    expect(mockOra.stopAndPersist).toHaveBeenCalledWith({
       symbol: expect.anything(),
       text: 'Dependencies installed'
     })
@@ -41,10 +66,7 @@ describe('installDependencies', () => {
 
   it('should call closeOraOnSIGNIT', () => {
     installDependencies({ packageManager: 'npm', clientDir: '/test/dir' })
-
-    jest.mock('../utils/spinner')
-
-    expect(closeOraOnSIGNIT).toHaveBeenCalledWith(spinner)
+    expect(closeOraOnSIGNIT).toHaveBeenCalledWith(mockOra)
   })
 
   it('should throw an error if clientDir does not exist', () => {
