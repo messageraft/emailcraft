@@ -1,47 +1,15 @@
-let mockOra: ReturnType<typeof createMockOra>
-const texts: string[] = []
-const createMockOra = () => ({
-  start: jest.fn(),
-  set text(text: string) {
-    texts.push(text)
-  },
-  succeed: jest.fn(),
-  stopAndPersist: jest.fn(),
-  fail: jest.fn()
-})
-jest.mock('ora', () => {
-  mockOra = createMockOra()
-  return () => mockOra
-})
-
-jest.mock('shelljs', () => ({
-  cd: jest.fn(),
-  exec: jest.fn(),
-  test: jest.fn()
-}))
-
-jest.mock('../utils/closeOraOnSigInt')
-
 import shell from 'shelljs'
 import { installDependencies } from './installDependencies'
 import { closeOraOnSIGNIT } from '../utils/closeOraOnSigInt'
 import { PackageManager } from '../typings'
+import { mockOra } from '../__mocks__/ora.mock'
+
+jest.mock('../utils/closeOraOnSigInt')
 
 describe('installDependencies', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     ;(shell.test as jest.Mock).mockReturnValue(true)
-    mockOra.start.mockImplementation(function (this: any) {
-      return this
-    })
-
-    mockOra.succeed.mockImplementation(function (this: any) {
-      return this
-    })
-
-    mockOra.stopAndPersist.mockImplementation(function (this: any) {
-      return this
-    })
   })
 
   it('should switch to the clientDir directory', () => {
